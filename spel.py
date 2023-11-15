@@ -1,14 +1,15 @@
 import random as r
 
 class playerClass():
-    def __init__(self, hp, damage, trap_risk):
+    def __init__(self, hp, damage, trap_risk, weapon):
         self.hp = hp
         self.damage = damage
         self.trap_risk = trap_risk
+        self.weapon = weapon
 
-Bruiser = playerClass(200, 20, 1.5)
-Archer = playerClass(120, 20, 2)
-Assassin = playerClass(70, 35, 2.5) 
+Bruiser = playerClass(200, 15, 1.5, "Rusty Axe")
+Archer = playerClass(120, 15, 2, "Broken Bow")
+Assassin = playerClass(70, 28, 2.5, "Crooked Dagger") 
 
 def startInput():
     answer = ""
@@ -25,7 +26,12 @@ def startInput():
         else:
             print("\nPlease enter one of the available options!")
 
-def chooseAction(time):
+def chooseAction(time, chosenClass, lvl):
+    bruiserWeapons  = ["Steel Axe", "Broad Axe", "Swift Axe", "Double-edged Axe", "Enchanted Double-edged Axe"]
+    archerWeapons  = ["Wooden Bow", "Black Bow", "Light Bow", "Swift Bow", "Enchanted Silver Bow"]
+    assassinWeapons  = ["Steel Dagger", "Heavy Sword", "Longsword", "Magic Dagger", "Flaming Dagger"]
+    weaponStrength = [1.2, 1.4, 1.6, 1.8, 2]
+    currentWeapon = chosenClass.weapon
     answer = ""
     while answer != "1":   
         if time == 0:
@@ -50,15 +56,11 @@ def chooseAction(time):
             continueAdventure()
             time += 1
         elif answer == "2":
-            checkInventory()
+            checkInventory(currentWeapon)
         elif answer == "3":
-            checkStats()
+            checkStats(chosenClass.hp, chosenClass.damage, chosenClass.trap_risk, lvl)
         else:
             print("\nPlease enter one of the available options!")
-
-    
-        
-    
 
 def chooseClass(name):
     answer = ""
@@ -93,8 +95,39 @@ def chooseClass(name):
         else:
             print("\nPlease enter one of the available options!")
 
+def checkStats(hp, dmg, trap_risk, lvl):  
+    print(f"""
+            Stats
+          
+        Health: {hp} HP
+                
+        Damage: {dmg} damage
+                  
+        Clumsiness: {trap_risk} seconds reaction time
+
+        Level: {lvl}
+""")
+    input("Press 'Enter' to continue!")
+
+def checkInventory(currentWeapon):
+    gold = 0
+    weapons = [currentWeapon]
+    
+    print(f"""
+
+            Inventory
+        
+        Money: {gold} gold
+
+        Your weapons: {weapons}
+        
+        Your potions:
+    
+    """)
+    input("Press 'Enter' to continue!")
+
 def main():
-    score = 0  
+    lvl = 0  
     alive = True
     time = 0
     startInput()
@@ -105,8 +138,8 @@ def main():
         """)
     chosenClass = chooseClass(name)
     while alive:
-        answer = chooseAction(time)
-    #if score > score i leaderboarden
-        #add score i leaderboard
+        answer = chooseAction(time, chosenClass, lvl)
+    #if lvl > lvl i leaderboarden
+        #add lvl i leaderboard
     
 main()
