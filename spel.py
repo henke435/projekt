@@ -19,11 +19,9 @@ def startInput():
         1. Start the game          2. Check the leaderboard
 
         """)
-        if answer == "1":
-            print("spelet startar")
-        elif answer == "2":
+        if answer == "2":
             print("leaderboard") 
-        else:
+        elif answer != "1":
             print("\nPlease enter one of the available options!")
 
 def chooseAction(time):
@@ -32,10 +30,10 @@ def chooseAction(time):
         if time == 0:
             answer = input(f"""
                     
-            What do you want do?
+        What do you want do?
                     
-            1. Begin your adventure      2. Check your inventory  
-                            3. Check your stats
+        1. Begin your adventure      2. Check your inventory  
+                        3. Check your stats
 
             """)
         else:
@@ -51,21 +49,26 @@ def chooseAction(time):
             time += 1
             return answer, time
         elif answer == "2":
-            return answer
+            return answer, time
         elif answer == "3":
-            return answer
+            return answer, time
         else:
             print("\nPlease enter one of the available options!")
 
 def continueAdventure():
-    answer = input("""
+    answer = ""
+    while answer != "1" and answer != "2"  and answer != "3": 
+        answer = input("""
             Choose one of the following three doors 
-          
-            1. Wooden door  2. Rusty door   3. Glowing door
-
+            
+            1. Wooden door              2. Rusty door   
+                         3. Stone gate
     
     """)
-    #fixa felhantering
+        if answer != "1" and answer != "2"  and answer != "3":
+            print("\nPlease enter one of the available options!")
+        
+    return r.randint(0,101)
 
 
 def chooseClass(name):
@@ -79,22 +82,25 @@ def chooseClass(name):
 
         """)
         if answer == "1":
-            print(f"""\n   You choose Bruiser, Good luck, {name}!""")
+            print(f"""\n        You choose Bruiser, Good luck, {name}!""")
+            input("\nPress 'Enter' to continue!")
             return Bruiser
         elif answer == "2":
-            print(f"""\n   You choose Archer, Good luck, {name}!""")
+            print(f"""\n        You choose Archer, Good luck, {name}!""")
+            input("\nPress 'Enter' to continue!")
             return Archer
         elif answer == "3":
-            print(f"""\n   You choose Assassin, Good luck, {name}!""")
+            print(f"""\n        You choose Assassin, Good luck, {name}!""")
+            input("\nPress 'Enter' to continue!")
             return Assassin
         elif answer == "4":
             print("""
                   
-                Bruiser: High HP, Medium DMG, High risk to fall into traps
+        Bruiser: High HP, Medium DMG, Litte reaction-time to react to traps
                 
-                Archer: Medium HP, Medium DMG, Medium risk to fall into traps
+        Archer: Medium HP, Medium DMG, Medium reaction-time to react to traps
                   
-                Assassin: Low HP, High DMG, Low risk to fall into traps
+        Assassin: Low HP, High DMG, High reaction-time to react to traps
                   
             """)
             input("Press 'Enter' to continue!")
@@ -116,7 +122,7 @@ def checkStats(hp, dmg, trap_risk, lvl):
     input("Press 'Enter' to continue!")
 
 def checkInventory(weapons, gold, potions):
-
+    answer = ""
     print(f"""
 
             Inventory
@@ -128,8 +134,24 @@ def checkInventory(weapons, gold, potions):
         Your potions: {potions}
     
     """)
-    input("Press 'Enter' to continue!")
+    while answer != "1" and answer != "2":
+        answer = input("""
+        Do you want to use a potion?
+                    
+            1. Yes        2. No
+                    
+            """)
+        if answer == "1":
+            pass
 
+def monsterFight():
+    pass
+def openChest():
+    pass
+def merchantBid():
+    pass
+def fallInTrap():
+    pass
 def main():
     bruiserWeapons  = ["Steel Axe", "Broad Axe", "Swift Axe", "Double-edged Axe", "Enchanted Double-edged Axe"]
     archerWeapons  = ["Wooden Bow", "Black Bow", "Light Bow", "Swift Bow", "Enchanted Silver Bow"]
@@ -152,19 +174,23 @@ def main():
     currentPlayerclass = playerClass(chosenClass.hp, chosenClass.damage, chosenClass.trap_risk, chosenClass.weapon)
     currentWeapon = currentPlayerclass.weapon
     weapons = [currentWeapon]
+    gold = 0
+    potions = ["Health Potion"]
     
     while alive:
         answer, time = chooseAction(time)
         if answer == "1":
             x = continueAdventure()
             if x < 40:
-                pass
+                monsterFight()
             elif x >= 40 and x < 65:
-                pass
+                openChest()
+            elif x >= 65 and x < 90:
+                merchantBid()
             elif x >= 90:
-                pass
+                fallInTrap()
         elif answer == "2":
-            checkInventory(weapons)
+            checkInventory(weapons, gold, potions)
         elif answer == "3":
             checkStats(currentPlayerclass.hp, currentPlayerclass.damage, currentPlayerclass.trap_risk, lvl)
         
