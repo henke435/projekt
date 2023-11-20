@@ -62,9 +62,10 @@ def continueAdventure():
         Choose one of the following three doors!
             
         1. Wooden door              2. Rusty door   
-                     3. Stone gate
-    
+                     3. Stone gate   
+        
         """)
+
         if answer != "1" and answer != "2"  and answer != "3":
             print("\nPlease enter one of the available options!")
         
@@ -95,12 +96,12 @@ def chooseClass(name):
             return Assassin
         elif answer == "4":
             print("""
-                  
         Bruiser: High HP, Medium DMG, Little reaction-time for traps
                 
         Archer: Medium HP, Medium DMG, Medium reaction-time for traps
                   
         Assassin: Low HP, High DMG, High reaction-time for traps
+
                   
             """)
             input("Press 'Enter' to continue!")
@@ -142,7 +143,11 @@ def checkInventory(weapons, gold, potions):
                     
         """)
         if answer == "1":
-            pass
+            print("\n        Which potion would you like to use?\n")
+            for i in range(len(potions)):
+                print(f"        {i + 1}. {potions[i]}")
+            input("""
+        """)
         elif answer != "2":
             print("\nPlease enter one of the available options!")
 
@@ -179,7 +184,6 @@ def main():
     currentPlayerclass = playerClass(chosenClass.hp, chosenClass.damage, chosenClass.trap_risk, chosenClass.weapon)
     currentWeapon = currentPlayerclass.weapon
     weapons = [currentWeapon]
-
     
     while alive:
         answer, time = chooseAction(time)
