@@ -177,28 +177,30 @@ def monsterFight(lvl):
 
 
 def openChest(dmg):
+    bruiserWeapons  = ["Steel Axe", "Broad Axe", "Swift Axe", "Double-edged Axe", "Enchanted Double-edged Axe"]
+    archerWeapons  = ["Wooden Bow", "Black Bow", "Light Bow", "Swift Bow", "Enchanted Silver Bow"]
+    assassinWeapons  = ["Steel Dagger", "Heavy Sword", "Longsword", "Magic Dagger", "Flaming Dagger"]
+    weaponStrength = [1.2, 1.4, 1.6, 1.8, 2]
     #lägg till så den returnar gold, weapon, potion
     print("Chest")
     gold = 34
-    weapon = None
+    weapon = bruiserWeapons[2]
     potions = None
     return gold, weapon, potions
+
+
 def merchantBid():
     print("You encountered a merchant")
 def fallInTrap():
     print("You fell in a trap!")
 
 def main():
-    bruiserWeapons  = ["Steel Axe", "Broad Axe", "Swift Axe", "Double-edged Axe", "Enchanted Double-edged Axe"]
-    archerWeapons  = ["Wooden Bow", "Black Bow", "Light Bow", "Swift Bow", "Enchanted Silver Bow"]
-    assassinWeapons  = ["Steel Dagger", "Heavy Sword", "Longsword", "Magic Dagger", "Flaming Dagger"]
-    weaponStrength = [1.2, 1.4, 1.6, 1.8, 2]
     #weapon och strenght ska bara vara i openChest()
 
     lvl = 0  
     alive = True
     time = 0
-    gold = 0
+    gold = 55
     potions = ["Health Potion"]
     
     startInput()
@@ -226,8 +228,10 @@ def main():
             elif odds >= 40 and odds < 65:
                 addedGold, addedWeapons, addedPotions = openChest(currentPlayerclass.damage)
                 gold += addedGold
-                weapons = weapons.append(addedWeapons)
-                potions = potions.append(addedPotions)
+                if addedWeapons != None:
+                    weapons.append(addedWeapons)
+                if addedPotions != None:
+                    potions.append(addedPotions)
                 print(weapons)
                 print(potions)
                 print(gold)
