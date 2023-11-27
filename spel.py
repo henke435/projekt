@@ -2,11 +2,11 @@ import random as r
 import math
 
 class playerClass():
-    def __init__(self, hp, damage, trap_risk, weapon):
+    def __init__(self, hp, damage, trapRisk, className):
         self.hp = hp
         self.damage = damage
-        self.trap_risk = trap_risk
-        self.weapon = weapon
+        self.trap_risk = trapRisk
+        self.className = className
 
 class monsterClass():
     def __init__(self, hp, damage, name):
@@ -14,7 +14,10 @@ class monsterClass():
         self.damage = damage
         self.name = name
 
-
+class Item():
+    def __init__(self, item_type, strength):
+        self.item_type = item_type
+        self.strength = strength
 
 def startInput():
     answer = ""
@@ -77,9 +80,6 @@ def continueAdventure():
     return r.randint(0,101)
 
 def chooseClass(name):
-    Bruiser = playerClass(200, 15, 1.5, "Rusty Axe")
-    Archer = playerClass(120, 15, 2, "Broken Bow")
-    Assassin = playerClass(70, 28, 2.5, "Crooked Dagger") 
     answer = ""
     while answer != "1" and answer != "2" and answer != "3":
         answer = input("""
@@ -92,15 +92,18 @@ def chooseClass(name):
         if answer == "1":
             print(f"""\n        You chose Bruiser, Good luck, {name}!""")
             input("\nPress 'Enter' to continue!")
-            return Bruiser
+            currentClass = playerClass(200, 15, 1.5, "Bruiser")
+            return currentClass
         elif answer == "2":
             print(f"""\n        You chose Archer, Good luck, {name}!""")
             input("\nPress 'Enter' to continue!")
-            return Archer
+            currentClass = playerClass(120, 15, 2, "Archer")
+            return currentClass
         elif answer == "3":
             print(f"""\n        You chose Assassin, Good luck, {name}!""")
             input("\nPress 'Enter' to continue!")
-            return Assassin
+            currentClass = playerClass(70, 28, 2.5, "Assassin")
+            return currentClass
         elif answer == "4":
             print("""
         Bruiser: High HP, Medium DMG, Little reaction-time for traps
@@ -115,15 +118,15 @@ def chooseClass(name):
         else:
             print("\nPlease enter one of the available options!")
 
-def checkStats(hp, dmg, trap_risk, lvl):  
+def checkStats(chosenClass, lvl):  
     print(f"""
             Stats
           
-        Health: {hp} HP
+        Health: {chosenClass.hp} HP
                 
-        Damage: {dmg} damage
+        Damage: {chosenClass.damage} damage
                   
-        Clumsiness: {trap_risk} seconds reaction time
+        Clumsiness: {chosenClass.trapRisk} seconds reaction time
 
         Level: {lvl}
 """)
@@ -136,12 +139,15 @@ def checkInventory(weapons, gold, potions):
             Inventory
         
         Money: {gold} gold
-
-        Your weapons: {weapons}
-        
-        Your potions: {potions}
+        """)
+    print("\n        Potions:")
+    for i in range(len(potions)):
+        print(f"            {i + 1}. {potions[i]}")
     
-    """)
+    print("\n        Weapons:")
+    for i in range(len(weapons)):
+        print(f"            {i + 1}. {weapons[i].item_type}")
+    
     while answer != "1" and answer != "2" and len(potions) != 0:
         answer = input("""
         Do you want to use a potion?
@@ -150,18 +156,13 @@ def checkInventory(weapons, gold, potions):
                     
         """)
         if answer == "1":
-            print("\n        Which potion would you like to use?\n")
-            for i in range(len(potions)):
-                print(f"        {i + 1}. {potions[i]}")
-            input("""
-        """)
+            pass #öka hp
         elif answer != "2":
             print("\nPlease enter one of the available options!")
 
 def monsterFight(lvl):
     print("You encountered a monster!")
-    monsterNameList = [
-    "Zargothrax", "Azazel", "Behemoth", "Cthulhu", "Dracula",
+    monsterNameList = ["Zargothrax", "Azazel", "Behemoth", "Cthulhu", "Dracula",
     "Echidna", "Fenrir", "Gorgon", "Hydra", "Ifrit",
     "Jormungandr", "Kelpie", "Leviathan", "Minotaur", "Nemean",
     "Orcus", "Phoenix", "Quetzalcoatl", "Ravana", "Sphinx",
@@ -172,16 +173,36 @@ def monsterFight(lvl):
     monsterHp = r.randint(30*round(math.sqrt(lvl)), 60*round(math.sqrt(lvl)))
     monster = monsterClass(monsterHp, monsterStrength, monsterNameList[r.randint(0, len(monsterNameList))])
 
-    print(monsterHp, monsterStrength, monsterNameList)
+    print(monster.hp, monster.damage, monster.name)
 #i fight tickar dmg från båda hpn tills en är död å då returnas hp och lvl ökar
 
 
-def openChest(dmg):
+def openChest(chosenClass):
+    #fixa en clean chest öppning
     bruiserWeapons  = ["Steel Axe", "Broad Axe", "Swift Axe", "Double-edged Axe", "Enchanted Double-edged Axe"]
     archerWeapons  = ["Wooden Bow", "Black Bow", "Light Bow", "Swift Bow", "Enchanted Silver Bow"]
     assassinWeapons  = ["Steel Dagger", "Heavy Sword", "Longsword", "Magic Dagger", "Flaming Dagger"]
     weaponStrength = [1.2, 1.4, 1.6, 1.8, 2]
-    #lägg till så den returnar gold, weapon, potion
+    if chosenClass.className == "Bruiser":
+        chestList = bruiserWeapons
+    if chosenClass.className == "Archer":
+        chestList = archerWeapons
+    if chosenClass.className == "Assassin":
+        chestList = assassinWeapons
+    chestList.append("Health Potion")
+    chestList.append("Health Potion")
+    chestList.append("Gold")
+    chestList.append("Gold")
+    index = r.randint(len(chestList))
+    recievedItem = chestList[index]
+    amount = 0
+    if recievedItem == "Health Potion":
+        return recievedItem, recievedItem
+        pass
+    if recievedItem == "Gold":
+        return recievedItem, amount
+    else:
+        return recievedItem, Item(recievedItem, weaponStrength[index])
     print("Chest")
     gold = 34
     weapon = bruiserWeapons[2]
@@ -197,10 +218,10 @@ def fallInTrap():
 def main():
     #weapon och strenght ska bara vara i openChest()
 
-    lvl = 0  
+    lvl = 1
     alive = True
     time = 0
-    gold = 55
+    gold = 100
     potions = ["Health Potion"]
     
     startInput()
@@ -212,12 +233,8 @@ def main():
         """)
     
     chosenClass = chooseClass(name)
-    currentPlayerclass = playerClass(chosenClass.hp, chosenClass.damage, chosenClass.trap_risk, chosenClass.weapon)
-    currentWeapon = currentPlayerclass.weapon
+    currentWeapon = Item("Rusty Knife", 1)
     weapons = [currentWeapon]
-    addedGold = 0
-    addedWeapons = ""
-    addedPotions = ""
     
     while alive:
         answer, time = chooseAction(time)
@@ -225,13 +242,9 @@ def main():
             odds = continueAdventure()
             if odds < 40:
                 monsterFight(lvl)
+# fixa så chest funkar
             elif odds >= 40 and odds < 65:
-                addedGold, addedWeapons, addedPotions = openChest(currentPlayerclass.damage)
-                gold += addedGold
-                if addedWeapons != None:
-                    weapons.append(addedWeapons)
-                if addedPotions != None:
-                    potions.append(addedPotions)
+                itemType,   = openChest(chosenClass)
                 print(weapons)
                 print(potions)
                 print(gold)
@@ -242,7 +255,7 @@ def main():
         elif answer == "2":
             checkInventory(weapons, gold, potions)
         elif answer == "3":
-            checkStats(currentPlayerclass.hp, currentPlayerclass.damage, currentPlayerclass.trap_risk, lvl)
+            checkStats(chosenClass, lvl)
         
         #if lvl > lvl i leaderboarden
         #add lvl i leaderboard
