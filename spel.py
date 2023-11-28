@@ -180,6 +180,7 @@ def openChest(chosenClass):
     archerWeapons  = ["Wooden Bow", "Black Bow", "Light Bow", "Swift Bow", "Enchanted Silver Bow"]
     assassinWeapons  = ["Steel Dagger", "Heavy Sword", "Longsword", "Magic Dagger", "Flaming Dagger"]
     weaponStrength = [1.2, 1.4, 1.6, 1.8, 2]
+    amount = "a"
     if chosenClass.className == "Bruiser":
         chestList = bruiserWeapons
     if chosenClass.className == "Archer":
@@ -192,6 +193,12 @@ def openChest(chosenClass):
     chestList.append("Gold")
     index = r.randint(0, len(chestList) - 1)
     recievedItem = chestList[index]
+    print(f"""
+        
+        You found {amount} {recievedItem} in a hidden chest!
+
+        """)
+    input("\nPress 'Enter' to continue!")
     if recievedItem == "Health Potion":
         return recievedItem, recievedItem
     
