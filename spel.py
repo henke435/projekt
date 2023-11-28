@@ -5,7 +5,7 @@ class playerClass():
     def __init__(self, hp, damage, trapRisk, className):
         self.hp = hp
         self.damage = damage
-        self.trap_risk = trapRisk
+        self.trapRisk = trapRisk
         self.className = className
 
 class monsterClass():
@@ -77,7 +77,7 @@ def continueAdventure():
         if answer != "1" and answer != "2"  and answer != "3":
             print("\nPlease enter one of the available options!")
         
-    return r.randint(0,101)
+    return r.randint(0,100)
 
 def chooseClass(name):
     answer = ""
@@ -147,7 +147,7 @@ def checkInventory(weapons, gold, potions):
     print("\n        Weapons:")
     for i in range(len(weapons)):
         print(f"            {i + 1}. {weapons[i].item_type}")
-    
+    input("\nPress 'Enter' to continue!")
     while answer != "1" and answer != "2" and len(potions) != 0:
         answer = input("""
         Do you want to use a potion?
@@ -162,16 +162,13 @@ def checkInventory(weapons, gold, potions):
 
 def monsterFight(lvl):
     print("You encountered a monster!")
-    monsterNameList = ["Zargothrax", "Azazel", "Behemoth", "Cthulhu", "Dracula",
-    "Echidna", "Fenrir", "Gorgon", "Hydra", "Ifrit",
-    "Jormungandr", "Kelpie", "Leviathan", "Minotaur", "Nemean",
-    "Orcus", "Phoenix", "Quetzalcoatl", "Ravana", "Sphinx",
+    monsterNameList = ["Zargothrax", "Azazel", "Behemoth", "Cthulhu", "Dracula", "Echidna", "Fenrir", "Gorgon", "Hydra", "Ifrit", "Jormungandr", "Kelpie", "Leviathan", "Minotaur", "Nemean", "Orcus", "Phoenix", "Quetzalcoatl", "Ravana", "Sphinx",
     "Tiamat", "Undine", "Vampire", "Wendigo", "Xolotl",
     "Yeti", "Zombie"]
     
     monsterStrength = r.randint(7*round(math.sqrt(lvl)), 12*round(math.sqrt(lvl)))
     monsterHp = r.randint(30*round(math.sqrt(lvl)), 60*round(math.sqrt(lvl)))
-    monster = monsterClass(monsterHp, monsterStrength, monsterNameList[r.randint(0, len(monsterNameList))])
+    monster = monsterClass(monsterHp, monsterStrength, monsterNameList[r.randint(0, len(monsterNameList) - 1 )])
 
     print(monster.hp, monster.damage, monster.name)
 #i fight tickar dmg från båda hpn tills en är död å då returnas hp och lvl ökar
@@ -193,9 +190,10 @@ def openChest(chosenClass):
     chestList.append("Health Potion")
     chestList.append("Gold")
     chestList.append("Gold")
-    index = r.randint(len(chestList))
+    index = r.randint(0, len(chestList) - 1)
     recievedItem = chestList[index]
     amount = 0
+    print(recievedItem)
     if recievedItem == "Health Potion":
         return recievedItem, recievedItem
         pass
@@ -244,7 +242,7 @@ def main():
                 monsterFight(lvl)
 # fixa så chest funkar
             elif odds >= 40 and odds < 65:
-                itemType,   = openChest(chosenClass)
+                itemType, itemstuff = openChest(chosenClass)
                 print(weapons)
                 print(potions)
                 print(gold)
