@@ -192,12 +192,11 @@ def openChest(chosenClass):
     chestList.append("Gold")
     index = r.randint(0, len(chestList) - 1)
     recievedItem = chestList[index]
-    amount = 0
-    print(recievedItem)
     if recievedItem == "Health Potion":
         return recievedItem, recievedItem
-        pass
+    
     if recievedItem == "Gold":
+        amount = r.randint(30,100)
         return recievedItem, amount
     else:
         return recievedItem, Item(recievedItem, weaponStrength[index])
@@ -242,10 +241,14 @@ def main():
                 monsterFight(lvl)
 # fixa så chest funkar
             elif odds >= 40 and odds < 65:
-                itemType, itemstuff = openChest(chosenClass)
-                print(weapons)
-                print(potions)
-                print(gold)
+                itemType, recievedItem = openChest(chosenClass)
+                if itemType == "Gold":
+                    gold += recievedItem
+                elif itemType == "Health Potion":
+                    potions.append(recievedItem)
+                else:
+                    weapons.append(recievedItem)
+                print(weapons, potions, gold)
             elif odds >= 65 and odds < 90:
                 merchantBid()
             elif odds >= 90:
