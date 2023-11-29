@@ -337,6 +337,6 @@ def main():
         
         #if lvl > lvl i leaderboarden
         #add lvl i leaderboard
-        #fixa odds för 
+        #fixa odds för allt
     
 main()
