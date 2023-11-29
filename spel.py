@@ -261,7 +261,7 @@ def merchant(gold, chosenClass):
         Hello there traveler! Would you like a gander at my little shop?
                     1. Yes                           2. No
                    
-""")
+        """)
     #fixa bidding
     while answer != "1" and answer != "2":
         print("\nPlease enter one of the available options!")
@@ -270,12 +270,12 @@ def merchant(gold, chosenClass):
                   
         Thats what I like to hear! Here's what I have in stock!
                   
-                """)
+        """)
         for i in range(len(merchantInventory)):
-            print(f"        {i + 1}. {merchantInventory[i].name}")
+            print(f"        {i + 1}. {merchantInventory[i].name}  ({merchantInventory[i].strength}/2)")
                 
         print(f"        {i + 2}. Health Potion")
-        bidding(gold)
+        bidding(gold, merchantInventory)
     elif answer == "2":
         print("""
 
@@ -283,9 +283,37 @@ def merchant(gold, chosenClass):
                   
 """)
         input("Press 'Enter' to continue!")        
-    #merchantsPrice = r.randint()
-def bidding():
-    return 1, "2"
+def bidding(gold, merchantInventory):
+    answerIsOk = False
+
+    while answerIsOk == False:
+        answer = input("""
+
+        What would you like to bid on?
+
+        """)
+        try:
+            x = int(answer)
+            
+        except ValueError:
+            print("\nPlease enter one of the available options!")
+        else:
+            if int(answer) <= len(merchantInventory) + 1 and int(answer) > 0:
+                answerIsOk = True
+    if int(answer) <= len(merchantInventory) and int(answer) > 0:
+        merchantBid = merchantInventory[answer-1].strength * r.randint(100,180)
+    else:
+        merchantBid = r.randint(100,180)
+    bid = input(f"""
+                
+                How much would you like to bid?
+                
+                """)
+
+
+        
+    
+
 def fallInTrap():
     print("You fell in a trap!")
 
