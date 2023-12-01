@@ -385,22 +385,21 @@ def bidding(gold, merchantInventory):
     
 def fallInTrap(chosenClass, alive):
     alfabet = "abcdefghijklmnopqrstuvwxyz"
-    print("\n       You see a chest up ahead in the distance and start approaching it.")
+    print("\n       ***You see a chest up ahead in the distance and start approaching it.***")
     time.sleep(2)
-    print("\n       A few meters from it, you feel the planks under your feet start to fall. ")
+    print("\n       ***A few meters from it, you feel the planks under your feet start to fall***")
     time.sleep(2)
-    print("\n       You try to hold yourself to the wall")
+    print("\n       ***You try to hold yourself to the wall***")
     time.sleep(1)
     print("\n       ***Quickly press the prompted key to save yourself***")
     time.sleep(3)
     letter = alfabet[r.randint(0,len(alfabet) - 1)]
-    print(f"\n       Press '{letter}' in under {chosenClass.trapRisk} seconds")
+    print(f"\n       ***Press '{letter}' in under {chosenClass.trapRisk} seconds***")
     startTime = time.perf_counter()
-    print(startTime)
-    pressedKey = keyboard.getch()
-    print(pressedKey)
-    if time.perf_counter() - startTime < chosenClass.trapRisk and pressedKey.lower() == letter:
-        print("U WON")
+    keyboard.wait(letter)
+    endTime = time.perf_counter()
+    if endTime - startTime < chosenClass.trapRisk:
+        
     else:
         print("du torska")
     return chosenClass, alive
