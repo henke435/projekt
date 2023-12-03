@@ -95,17 +95,17 @@ def chooseClass(name):
         if answer == "1":
             print(f"""\n        You chose Bruiser, Good luck, {name}!""")
             input("\nPress 'Enter' to continue!")
-            currentClass = playerClass(200, 15, 1.5, "Bruiser")
+            currentClass = playerClass(200, 15, 0.8, "Bruiser")
             return currentClass
         elif answer == "2":
             print(f"""\n        You chose Archer, Good luck, {name}!""")
             input("\nPress 'Enter' to continue!")
-            currentClass = playerClass(120, 15, 2, "Archer")
+            currentClass = playerClass(120, 15, 1.1, "Archer")
             return currentClass
         elif answer == "3":
             print(f"""\n        You chose Assassin, Good luck, {name}!""")
             input("\nPress 'Enter' to continue!")
-            currentClass = playerClass(70, 28, 2.5, "Assassin")
+            currentClass = playerClass(70, 28, 1.4, "Assassin")
             return currentClass
         elif answer == "4":
             print("""
@@ -188,6 +188,8 @@ def monsterFight(chosenClass, lvl, gold, currentWeapon):
     print("\n         ***Fighting***")
     while chosenClass.hp > 0 and monster.hp > 0:
         monster.hp = monster.hp - (chosenClass.damage * currentWeapon.strength)
+        if monster.hp <= 0:
+            break
         chosenClass.hp = chosenClass.hp - monster.damage
     
     addedGold = r.randint(50, 100)
@@ -554,7 +556,7 @@ def main():
     lvl = 1
     alive = True
     time = 0
-    gold = 100000
+    gold = 100
     potions = ["Health Potion"]
     
     startInput()
@@ -568,15 +570,15 @@ def main():
     chosenClass = chooseClass(name)
     maxHp = chosenClass.hp
     currentWeapon = Item("Rusty Knife", 1)
-    weapons = [currentWeapon, Item("HEj", 2)]
+    weapons = [currentWeapon]
     
     while alive:
         answer, time = chooseAction(time)
         if answer == "1":
             odds = continueAdventure()
-            if odds < 0:
+            if odds < 35:
                 chosenClass, lvl, gold, alive = monsterFight(chosenClass, lvl, gold,currentWeapon)
-            elif odds >= 0 and odds < 0:
+            elif odds >= 35 and odds < 55:
                 itemType, recievedItem = openChest(chosenClass)
                 if itemType == "Gold":
                     gold += recievedItem
@@ -586,7 +588,7 @@ def main():
                     weapons.append(recievedItem)
                     if recievedItem.strength > currentWeapon.strength:
                         currentWeapon = recievedItem
-            elif odds >= 1 and odds < 100:
+            elif odds >= 55 and odds < 75:
                 recievedItem, weapons, gold = merchant(gold, chosenClass, weapons, potions)
                 if recievedItem == "Health Potion":
                     potions.append(recievedItem)
@@ -600,7 +602,7 @@ def main():
 
 
                 
-            elif odds >= 100:
+            elif odds >= 75:
                 chosenClass, alive, gold = fallInTrap(chosenClass, alive, gold, maxHp)
         elif answer == "2":
             chosenClass, potions = checkInventory(weapons, gold, potions, chosenClass, maxHp)
