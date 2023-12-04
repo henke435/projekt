@@ -1,3 +1,0 @@
-apa 10
-jonas 6
-stina 1

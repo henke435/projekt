@@ -31,7 +31,7 @@ def startInput():
 
         """)
         if answer == "2":
-            print("leaderboard") 
+            print(f.read()) 
         elif answer != "1":
             print("\nPlease enter one of the available options!")
 
@@ -206,8 +206,7 @@ def monsterFight(chosenClass, lvl, gold, currentWeapon):
         input("\nPress 'Enter' to continue!")
         return chosenClass, lvl + 1, gold + addedGold, True
     
-def openChest(chosenClass):
-    #fixa en clean chest öppning
+def openChest(chosenClass, gold, currentWeapon, potions, weapons):
     bruiserWeapons  = ["Steel Axe", "Broad Axe", "Swift Axe", "Double-edged Axe", "Enchanted Double-edged Axe"]
     archerWeapons  = ["Wooden Bow", "Black Bow", "Light Bow", "Swift Bow", "Enchanted Silver Bow"]
     assassinWeapons  = ["Steel Dagger", "Heavy Sword", "Longsword", "Magic Dagger", "Flaming Dagger"]
@@ -233,15 +232,24 @@ def openChest(chosenClass):
 
         """)
     input("\nPress 'Enter' to continue!")
-    if recievedItem == "Health Potion":
-        return recievedItem, recievedItem
-    
     if recievedItem == "Gold":
-        return recievedItem, amount
+        gold += amount
+        return gold, currentWeapon, potions, weapons
+    
+    elif recievedItem == "Health Potion":
+        potions.append(recievedItem)
+        return gold, currentWeapon, potions, weapons
+    
     else:
-        return recievedItem, Item(recievedItem, weaponStrength[index])
+        recievedItem = Item(recievedItem, weaponStrength[index])
+        weapons.append(recievedItem)
+        
+        if recievedItem.strength > currentWeapon.strength:
+            currentWeapon = recievedItem
 
-def merchant(gold, chosenClass, weapons, potions):
+        return gold, currentWeapon, potions, weapons
+
+def merchant(chosenClass, gold, currentWeapon, potions, weapons):
     bruiserWeapons  = ["Steel Axe", "Broad Axe", "Swift Axe", "Double-edged Axe", "Enchanted Double-edged Axe"]
     archerWeapons  = ["Wooden Bow", "Black Bow", "Light Bow", "Swift Bow", "Enchanted Silver Bow"]
     assassinWeapons  = ["Steel Dagger", "Heavy Sword", "Longsword", "Magic Dagger", "Flaming Dagger"]
@@ -292,7 +300,9 @@ def merchant(gold, chosenClass, weapons, potions):
                 
         print(f"        {i + 2}. Health Potion")
         time.sleep(1)
-        return bidding(gold, merchantInventory, weapons, potions)
+        potions, weapons, gold, currentWeapon = bidding(gold, merchantInventory, weapons, potions, currentWeapon)
+        
+        return gold, currentWeapon, potions, weapons
     elif answer == "2":
         print("""
 
@@ -300,12 +310,20 @@ def merchant(gold, chosenClass, weapons, potions):
                   
 """)
         input("Press 'Enter' to continue!")   
-        return "", weapons, gold
+        return gold, currentWeapon, potions, weapons
     else:
-        weapons, gold = selling(gold, chosenClass, weapons)
-        return "", weapons, gold
+        weapons, gold, currentWeapon = selling(gold, weapons, currentWeapon)
+        return gold, currentWeapon, potions, weapons
+
+    #             elif recievedItem != "" and recievedItem.strength > currentWeapon.strength:
+    #                 currentWeapon = recievedItem
+    #             elif currentWeapon not in weapons:
+    #                 currentWeapon = weapons[0]
+    #                 for i in range(0, len(weapons)):
+    #                     if currentWeapon.strength < weapons[i].strength:
+    #                         currentWeapon = weapons[i]    
     
-def selling(gold, chosenClass, weapons):
+def selling(gold, weapons, currentWeapon):
     keepSelling = True
     if len(weapons) > 1:
         while keepSelling:
@@ -318,6 +336,7 @@ def selling(gold, chosenClass, weapons):
             for i in range (len(weapons)):
                 print(f"        {i + 1}. {weapons[i].name}  ({weapons[i].strength}/3)")
                 time.sleep(1)
+
             while answerIsOk == False:
                 weaponToSell = input("\n        ")
                 try:
@@ -328,6 +347,7 @@ def selling(gold, chosenClass, weapons):
                     if int(weaponToSell) > 0 and int(weaponToSell) <= i + 1:
                         answerIsOk = True
             print("\n        Hmmm....")
+            
             time.sleep(2)
             merchantBid = round(r.randint(40, 80)*weapons[int(weaponToSell) - 1].strength)
             print(f"""\n        I think I can give you about {merchantBid} gold for that {weapons[int(weaponToSell) - 1].name}, whaddaya think?
@@ -338,11 +358,13 @@ def selling(gold, chosenClass, weapons):
             while answer != "1" and answer != "2" and answer != "3":
                 print("\nPlease enter one of the available options!")
                 answer = input("\n\n       ")
+            
             if answer == "1":
                 weapons.pop(int(weaponToSell)-1)
                 gold += merchantBid
+                
                 if len(weapons) > 1:
-                    print("""\n       Pleasure doing business with you, would you like to sell something else?
+                    print("""\n       Pleasure doing business with you, would you like to sell me something else?
                                     1. Yes                   2. No
     """)
                     answer_2 = input("\n       ")
@@ -355,14 +377,20 @@ def selling(gold, chosenClass, weapons):
                         keepSelling = False
                 else: 
                     keepSelling = False
+           
             elif answer == "2":
                 keepSelling = False
                 print("\n       Good luck on the path!")
     else:
         print("\n        Sorry but you don't seem to have enough items to sell")
-    return weapons, gold
+    if currentWeapon not in weapons:
+        currentWeapon = weapons[0]
+        for i in range(0, len(weapons)):
+            if currentWeapon.strength < weapons[i].strength:
+                currentWeapon = weapons[i]    
+    return weapons, gold, currentWeapon
         
-def bidding(gold, merchantInventory, weapons, potions):
+def bidding(gold, merchantInventory, weapons, potions, currentWeapon):
     answerIsOk = False
     frustration = 0
     merchantItem = ""
@@ -410,7 +438,7 @@ def bidding(gold, merchantInventory, weapons, potions):
             
         """)
             input("Press 'Enter' to continue!") 
-            return "", weapons, gold
+            return potions, weapons, gold
         else:
             print("\n        That's too low. Try a higher bid!\n\n")
             print(f"        Frustration: {round(frustration)}/100")
@@ -431,7 +459,7 @@ def bidding(gold, merchantInventory, weapons, potions):
 
 """)    
         input("Press 'Enter' to continue!") 
-        return "", weapons, gold
+        return potions, weapons, gold, currentWeapon
     elif frustration < 100:
         print("""
 
@@ -441,10 +469,14 @@ def bidding(gold, merchantInventory, weapons, potions):
         input("Press 'Enter' to continue!")  
         gold = gold - bid
         if merchantItem == "Health Potion":
-            return merchantItem, weapons, gold
+            potions.append(merchantItem)
+            return potions, weapons, gold, currentWeapon
         else:
-            weapons.append(Item(merchantInventory[int(answer)-1].name, merchantInventory[int(answer)-1].strength))
-            return merchantInventory[int(answer)-1], weapons, gold
+            merchantItem = Item(merchantInventory[int(answer)-1].name, merchantInventory[int(answer)-1].strength)
+            weapons.append(merchantItem)
+            if merchantItem.strength > currentWeapon.strength:
+                currentWeapon = merchantItem
+            return potions, weapons, gold, currentWeapon
     
 def fallInTrap(chosenClass, alive, gold, maxHp):
     alfabet = "abcdefghijklmnopqrstuvwxyz"
@@ -452,38 +484,38 @@ def fallInTrap(chosenClass, alive, gold, maxHp):
     addedGold = 0
     if textVariation == 0:
         print("\n       ***You see a chest up ahead in the distance and start approaching it.***")
-        time.sleep(2)
+        time.sleep(3)
         print("\n       ***A few meters from it, you feel the planks under your feet start to fall***")
-        time.sleep(2)
+        time.sleep(3)
         print("\n       ***You try to hold yourself to the wall***")
-        time.sleep(2)
+        time.sleep(3)
         print("\n       ***Quickly press the prompted key to save yourself***")
         time.sleep(3)
     elif textVariation == 1:
         print("\n       ***You come across a mystical orb shimmering with magical energy. As you approach, the ground begins to shake.***")
-        time.sleep(2)
+        time.sleep(3)
         print("\n       ***A magical forcefield surrounds you, and you realize that the only way to unlock it is by solving a code puzzle.***")
-        time.sleep(2)
+        time.sleep(3)
         print("\n       ***Symbols and glyphs float in the air, forming a complex code.***")
-        time.sleep(2)
+        time.sleep(3)
         print("\n       ***Quickly press the prompted key to decipher the magical code and unlock the forcefield, or face the consequences.***")
         time.sleep(3)
     elif textVariation == 2:
         print("\n       ***You stumble upon an ancient library hidden deep within a mysterious forest.***")
-        time.sleep(2)
+        time.sleep(3)
         print("\n       ***As you explore, the library's guardian, an ancient elf, locks you in and challenges you with a riddle.***")
-        time.sleep(2)
+        time.sleep(3)
         print("\n       ***The words on its pages rearrange themselves into a cryptic code.***")
-        time.sleep(2)
+        time.sleep(3)
         print("\n       ***Quickly press the prompted key to solve the riddle to regain your freedom.***")
         time.sleep(3)
     elif textVariation == 3:
         print("\n       ***You find yourself in an abandoned laboratory filled with strange contraptions and flickering lights.***")
-        time.sleep(2)
+        time.sleep(3)
         print("\n       ***A holographic message materializes in front of you, presenting a complex mathematical problem.***")
-        time.sleep(2)
+        time.sleep(3)
         print("\n       ***Equations and symbols float in the air, forming a code that is the key to your freedom.***")
-        time.sleep(2)
+        time.sleep(3)
         print("\n       ***Quickly press the prompted key to solve the mathematical code and regain your freedom.***")
         time.sleep(3)
     letter = alfabet[r.randint(0,len(alfabet) - 1)]
@@ -495,43 +527,43 @@ def fallInTrap(chosenClass, alive, gold, maxHp):
         solvedPuzzle = True
         if textVariation == 0:
             print("\n       ***You successfully grab onto the wall and climb out.***")
-            time.sleep(2)
+            time.sleep(3)
             print("\n       ***You escape the trap and leave without any harm.***")
         elif textVariation == 1:
             print("\n       ***The symbols align perfectly, and the forcefield dissipates. The forcefield opens before you.***")
-            time.sleep(2)
+            time.sleep(3)
             print("\n       ***You step out of the forcefield, stepping without harm.***")
 
         elif textVariation == 2:
             print("\n       ***The pages of the book settle, and the guardian nods approvingly.***")
-            time.sleep(2)
+            time.sleep(3)
             print("\n       ***The library opens again, and you leave without the guardian hurting you***")
         elif textVariation == 3:
             print("\n       ***The equations align perfectly, and the holographic message dissolves. The laboratory's doors open.***")
-            time.sleep(2)
+            time.sleep(3)
             print("\n       ***You walk out unscathed.***")
         
     else:
         solvedPuzzle = False
         if textVariation == 0:
             print("\n       ***You try to grab ahold of the wall, but your hand slips and you fall down a small cliff***")
-            time.sleep(2)
+            time.sleep(3)
             print("\n       ***You take some damage which leaves you halting out.***")
         elif textVariation == 1:
             print("\n       ***The symbols blur together, and the forcefield reacts violently.***")
-            time.sleep(2)
+            time.sleep(3)
             print("\n       ***A magical shockwave throws you back, and the orb sounds with an echoing hum.***")
-            time.sleep(2)
+            time.sleep(3)
             print("\n       ***Unable to withstand the magical backlash, you take damage due to the mystical forces.***")
         elif textVariation == 2:
             print("\n       ***The words on the pages become chaotic, and the guardian's eyes flash ominously.***")
-            time.sleep(2)
+            time.sleep(3)
             print("\n       ***A magical barrier seals the library's entrance, preventing you from accessing its knowledge.***")
-            time.sleep(2)
+            time.sleep(3)
             print("\n       ***Overwhelmed by the magical enchantments, you feel the guardian draining some of your health with magic.***")
         elif textVariation == 3:
             print("\n       ***The holographic message flickers, and an alarm echoes through the laboratory.***")
-            time.sleep(2)
+            time.sleep(3)
             print("\n       ***Security systems activate, releasing a swarm of nanobots that inflict damage. You stagger out of the laboratory wounded.***")
     time.sleep(2)
     if solvedPuzzle == True:
@@ -551,6 +583,21 @@ def fallInTrap(chosenClass, alive, gold, maxHp):
             time.sleep(2)
         print()
     return chosenClass, alive, gold + addedGold
+
+def leaderboard(name, lvl):
+    answer = input("""
+                   Do you want to save your turn in the leaderboard?
+
+                   1. Yes                     2. No
+                   """)
+    if answer == "1":
+        f = open("leaderboard.txt", "a")
+        f.write(name, lvl)
+    
+        print(f.read())
+    elif answer == "2": 
+        print("Alrighty, good luck on your next adventure!")
+    
 
 def main():
     lvl = 1
@@ -576,34 +623,19 @@ def main():
         answer, time = chooseAction(time)
         if answer == "1":
             odds = continueAdventure()
-            if odds < 35:
-                chosenClass, lvl, gold, alive = monsterFight(chosenClass, lvl, gold,currentWeapon)
-            elif odds >= 35 and odds < 55:
-                itemType, recievedItem = openChest(chosenClass)
-                if itemType == "Gold":
-                    gold += recievedItem
-                elif itemType == "Health Potion":
-                    potions.append(recievedItem)
-                else:
-                    weapons.append(recievedItem)
-                    if recievedItem.strength > currentWeapon.strength:
-                        currentWeapon = recievedItem
-            elif odds >= 55 and odds < 75:
-                recievedItem, weapons, gold = merchant(gold, chosenClass, weapons, potions)
-                if recievedItem == "Health Potion":
-                    potions.append(recievedItem)
-                elif recievedItem != "" and recievedItem.strength > currentWeapon.strength:
-                    currentWeapon = recievedItem
-                elif currentWeapon not in weapons:
-                    currentWeapon = weapons[0]
-                    for i in range(0, len(weapons)):
-                        if currentWeapon.strength < weapons[i].strength:
-                            currentWeapon = weapons[i]
 
+            if odds < 0:
+                chosenClass, lvl, gold, alive = monsterFight(chosenClass, lvl, gold, currentWeapon)
 
-                
-            elif odds >= 75:
+            elif odds >= 0 and odds < 0:
+                gold, currentWeapon, potions, weapons = openChest(chosenClass, gold, currentWeapon, potions, weapons)
+
+            elif odds >= 0 and odds < 100:
+                gold, currentWeapon, potions, weapons = merchant(chosenClass, gold, currentWeapon, potions, weapons)
+        
+            elif odds >= 100:
                 chosenClass, alive, gold = fallInTrap(chosenClass, alive, gold, maxHp)
+
         elif answer == "2":
             chosenClass, potions = checkInventory(weapons, gold, potions, chosenClass, maxHp)
         elif answer == "3":
@@ -612,5 +644,8 @@ def main():
         #if lvl > lvl i leaderboarden
         #add lvl i leaderboard
         #fixa odds för allt
+
+    leaderboard(name, lvl)   
+
     
 main()
