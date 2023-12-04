@@ -68,23 +68,41 @@ def chooseAction(time):
 
 def continueAdventure():
     answer = ""
-    while answer != "1" and answer != "2"  and answer != "3": 
-        answer = input("""
+    textVariation = r.randint(0,2)
+    while answer not in ["1", "2", "3"]: 
+        if textVariation == 0:
+            answer = input("""
         Choose one of the following three doors!
             
         1. Wooden door              2. Rusty door   
                      3. Stone gate   
         
         """)
+        if textVariation == 1:
+            answer = input("""
+        Choose one of the following three doors!
+            
+        1. Elven Tree Portal       2. Steampunk Gear Door   
+                    3. Wizard's Rune Gate   
 
-        if answer != "1" and answer != "2"  and answer != "3":
+        """)
+        if textVariation == 2:
+            answer = input("""
+        Choose one of the following three doors!
+        
+        1. Elven Tree Archway    2. Dragonforged Iron Door   
+                      3. Runestone Gateway   
+
+        """)
+
+        if answer not in ["1", "2", "3"]:
             print("\nPlease enter one of the available options!")
         
     return r.randint(0,100)
 
 def chooseClass(name):
     answer = ""
-    while answer != "1" and answer != "2" and answer != "3":
+    while answer not in ["1", "2", "3"]: 
         answer = input("""
                 
         What class do you want to play?
@@ -153,7 +171,7 @@ def checkInventory(weapons, gold, potions, chosenClass, maxHp):
     for i in range(len(weapons)):
         print(f"            {i + 1}. {weapons[i].name}")
     input("\nPress 'Enter' to continue!")
-    while answer != "1" and answer != "2" and len(potions) != 0:
+    while answer not in ["1", "2"] and len(potions) != 0:
         answer = input("""
         Do you want to use a potion?
                     
@@ -285,7 +303,7 @@ def merchant(chosenClass, gold, currentWeapon, potions, weapons):
                    
         """)
     #fixa bidding
-    while answer != "1" and answer != "2" and answer != "3":
+    while answer not in ["1", "2", "3"]:
         print("\nPlease enter one of the available options!")
         answer = input("\n\n       ")
     if answer == "1":
@@ -313,15 +331,7 @@ def merchant(chosenClass, gold, currentWeapon, potions, weapons):
         return gold, currentWeapon, potions, weapons
     else:
         weapons, gold, currentWeapon = selling(gold, weapons, currentWeapon)
-        return gold, currentWeapon, potions, weapons
-
-    #             elif recievedItem != "" and recievedItem.strength > currentWeapon.strength:
-    #                 currentWeapon = recievedItem
-    #             elif currentWeapon not in weapons:
-    #                 currentWeapon = weapons[0]
-    #                 for i in range(0, len(weapons)):
-    #                     if currentWeapon.strength < weapons[i].strength:
-    #                         currentWeapon = weapons[i]    
+        return gold, currentWeapon, potions, weapons  
     
 def selling(gold, weapons, currentWeapon):
     keepSelling = True
@@ -355,7 +365,7 @@ def selling(gold, weapons, currentWeapon):
                            3. I would rather sell something else.
     """)                                            
             answer = input("\n       ")
-            while answer != "1" and answer != "2" and answer != "3":
+            while answer not in ["1", "2", "3"]:
                 print("\nPlease enter one of the available options!")
                 answer = input("\n\n       ")
             
@@ -597,7 +607,6 @@ def leaderboard(name, lvl):
         print(f.read())
     elif answer == "2": 
         print("Alrighty, good luck on your next adventure!")
-    
 
 def main():
     lvl = 1
@@ -647,5 +656,4 @@ def main():
 
     leaderboard(name, lvl)   
 
-    
 main()
