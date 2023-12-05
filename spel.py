@@ -22,7 +22,7 @@ class Item():
         self.name = name
         self.strength = strength
 
-def startInput():
+def startInput(): #klar
     answer = ""
     while answer != "1":
         answer = input("""
@@ -31,11 +31,11 @@ def startInput():
 
         """)
         if answer == "2":
-            print(f.read()) 
+            print() 
         elif answer != "1":
             print("\nPlease enter one of the available options!")
 
-def chooseAction(time):
+def chooseAction(time): #klar
     answer = ""
     while answer != "1":   
         if time == 0:
@@ -66,7 +66,7 @@ def chooseAction(time):
         else:
             print("\nPlease enter one of the available options!")
 
-def continueAdventure():
+def continueAdventure(): #klar
     answer = ""
     textVariation = r.randint(0,2)
     while answer not in ["1", "2", "3"]: 
@@ -100,7 +100,7 @@ def continueAdventure():
         
     return r.randint(0,100)
 
-def chooseClass(name):
+def chooseClass(name): #klar
     answer = ""
     while answer not in ["1", "2", "3"]: 
         answer = input("""
@@ -139,7 +139,7 @@ def chooseClass(name):
         else:
             print("\nPlease enter one of the available options!")
 
-def checkStats(chosenClass, lvl, currentWeapon, maxHp):  
+def checkStats(chosenClass, lvl, currentWeapon, maxHp): #klar
     print(f"""
             Stats
           
@@ -156,7 +156,7 @@ def checkStats(chosenClass, lvl, currentWeapon, maxHp):
 """)
     input("Press 'Enter' to continue!")
 
-def checkInventory(weapons, gold, potions, chosenClass, maxHp):
+def checkInventory(weapons, gold, potions, chosenClass, maxHp): #klar
     answer = ""
     print(f"""
 
@@ -190,10 +190,8 @@ def checkInventory(weapons, gold, potions, chosenClass, maxHp):
             print("\nPlease enter one of the available options!")
     return chosenClass, potions
 
-def monsterFight(chosenClass, lvl, gold, currentWeapon):
-    monsterNameList = ["Zargothrax", "Azazel", "Behemoth", "Cthulhu", "Dracula", "Echidna", "Fenrir", "Gorgon", "Hydra", "Ifrit", "Jormungandr", "Kelpie", "Leviathan", "Minotaur", "Nemean", "Orcus", "Phoenix", "Quetzalcoatl", "Ravana", "Sphinx",
-    "Tiamat", "Undine", "Vampire", "Wendigo", "Xolotl",
-    "Yeti", "Zombie"]
+def monsterFight(chosenClass, lvl, gold, currentWeapon): #fixa lite mer inlevelse, kanske durability t vapen
+    monsterNameList = ["Zargothrax", "Azazel", "Behemoth", "Cthulhu", "Dracula", "Echidna", "Fenrir", "Gorgon", "Hydra", "Ifrit", "Jormungandr", "Kelpie", "Leviathan", "Minotaur", "Nemean", "Orcus", "Phoenix", "Quetzalcoatl", "Ravana", "Sphinx", "Tiamat", "Undine", "Vampire", "Wendigo", "Xolotl", "Yeti", "Zombie"]
     
     monsterStrength = r.randint(7*round(math.sqrt(lvl)), 12*round(math.sqrt(lvl)))
     monsterHp = r.randint(30*round(math.sqrt(lvl)), 60*round(math.sqrt(lvl)))
@@ -201,7 +199,7 @@ def monsterFight(chosenClass, lvl, gold, currentWeapon):
 
     print(f"\n        You encounter a {monster.name} with {monster.hp} hp and {monster.damage} damage")
 
-    print(f"\n        You have {chosenClass.hp} hp and {chosenClass.damage * currentWeapon.strength} damage")
+    print(f"\n        You have {chosenClass.hp} hp and {round(chosenClass.damage * currentWeapon.strength)} damage")
 
     print("\n         ***Fighting***")
     while chosenClass.hp > 0 and monster.hp > 0:
@@ -224,7 +222,7 @@ def monsterFight(chosenClass, lvl, gold, currentWeapon):
         input("\nPress 'Enter' to continue!")
         return chosenClass, lvl + 1, gold + addedGold, True
     
-def openChest(chosenClass, gold, currentWeapon, potions, weapons):
+def openChest(chosenClass, gold, currentWeapon, potions, weapons): #klar
     bruiserWeapons  = ["Steel Axe", "Broad Axe", "Swift Axe", "Double-edged Axe", "Enchanted Double-edged Axe"]
     archerWeapons  = ["Wooden Bow", "Black Bow", "Light Bow", "Swift Bow", "Enchanted Silver Bow"]
     assassinWeapons  = ["Steel Dagger", "Heavy Sword", "Longsword", "Magic Dagger", "Flaming Dagger"]
@@ -267,7 +265,7 @@ def openChest(chosenClass, gold, currentWeapon, potions, weapons):
 
         return gold, currentWeapon, potions, weapons
 
-def merchant(chosenClass, gold, currentWeapon, potions, weapons):
+def merchant(chosenClass, gold, currentWeapon, potions, weapons): #klar
     bruiserWeapons  = ["Steel Axe", "Broad Axe", "Swift Axe", "Double-edged Axe", "Enchanted Double-edged Axe"]
     archerWeapons  = ["Wooden Bow", "Black Bow", "Light Bow", "Swift Bow", "Enchanted Silver Bow"]
     assassinWeapons  = ["Steel Dagger", "Heavy Sword", "Longsword", "Magic Dagger", "Flaming Dagger"]
@@ -333,7 +331,7 @@ def merchant(chosenClass, gold, currentWeapon, potions, weapons):
         weapons, gold, currentWeapon = selling(gold, weapons, currentWeapon)
         return gold, currentWeapon, potions, weapons  
     
-def selling(gold, weapons, currentWeapon):
+def selling(gold, weapons, currentWeapon): #fixa inlevelse
     keepSelling = True
     if len(weapons) > 1:
         while keepSelling:
@@ -400,7 +398,7 @@ def selling(gold, weapons, currentWeapon):
                 currentWeapon = weapons[i]    
     return weapons, gold, currentWeapon
         
-def bidding(gold, merchantInventory, weapons, potions, currentWeapon):
+def bidding(gold, merchantInventory, weapons, potions, currentWeapon): #klar
     answerIsOk = False
     frustration = 0
     merchantItem = ""
@@ -448,7 +446,7 @@ def bidding(gold, merchantInventory, weapons, potions, currentWeapon):
             
         """)
             input("Press 'Enter' to continue!") 
-            return potions, weapons, gold
+            return potions, weapons, gold, currentWeapon
         else:
             print("\n        That's too low. Try a higher bid!\n\n")
             print(f"        Frustration: {round(frustration)}/100")
@@ -488,7 +486,7 @@ def bidding(gold, merchantInventory, weapons, potions, currentWeapon):
                 currentWeapon = merchantItem
             return potions, weapons, gold, currentWeapon
     
-def fallInTrap(chosenClass, alive, gold, maxHp):
+def fallInTrap(chosenClass, alive, gold, maxHp): #klar
     alfabet = "abcdefghijklmnopqrstuvwxyz"
     textVariation = r.randint(0,3)
     addedGold = 0
@@ -594,17 +592,17 @@ def fallInTrap(chosenClass, alive, gold, maxHp):
         print()
     return chosenClass, alive, gold + addedGold
 
-def leaderboard(name, lvl):
+def leaderboard(name, lvl, chosenClass): #fixa så de funkar bra
     answer = input("""
-                   Do you want to save your turn in the leaderboard?
+        Do you want to save your turn in the leaderboard?
 
-                   1. Yes                     2. No
-                   """)
+                1. Yes                     2. No
+        
+        """)
     if answer == "1":
         f = open("leaderboard.txt", "a")
-        f.write(name, lvl)
+        f.write(f"{name}, {chosenClass.className},{lvl}\n")
     
-        print(f.read())
     elif answer == "2": 
         print("Alrighty, good luck on your next adventure!")
 
@@ -633,16 +631,16 @@ def main():
         if answer == "1":
             odds = continueAdventure()
 
-            if odds < 0:
+            if odds < 35:
                 chosenClass, lvl, gold, alive = monsterFight(chosenClass, lvl, gold, currentWeapon)
 
-            elif odds >= 0 and odds < 0:
+            elif odds >= 35 and odds < 55:
                 gold, currentWeapon, potions, weapons = openChest(chosenClass, gold, currentWeapon, potions, weapons)
 
-            elif odds >= 0 and odds < 100:
+            elif odds >= 55 and odds < 75:
                 gold, currentWeapon, potions, weapons = merchant(chosenClass, gold, currentWeapon, potions, weapons)
         
-            elif odds >= 100:
+            elif odds >= 75:
                 chosenClass, alive, gold = fallInTrap(chosenClass, alive, gold, maxHp)
 
         elif answer == "2":
@@ -654,6 +652,6 @@ def main():
         #add lvl i leaderboard
         #fixa odds för allt
 
-    leaderboard(name, lvl)   
+    leaderboard(name, lvl, chosenClass)   
 
 main()
