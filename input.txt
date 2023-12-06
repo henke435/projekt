@@ -11,3 +11,4 @@ herre   , 3
 hej    2
 Hej    2
 Chamme 9
+Chamme, 14
