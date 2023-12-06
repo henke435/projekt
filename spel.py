@@ -3,7 +3,6 @@ import random as r
 import math
 import time
 
-
 class playerClass():
     def __init__(self, hp, damage, trapRisk, className):
         self.hp = hp
@@ -31,9 +30,17 @@ def startInput(): #klar
 
         """)
         if answer == "2":
-            print() 
+            print("\n")
+            printLeaderboard()
+            
         elif answer != "1":
             print("\nPlease enter one of the available options!")
+
+def printLeaderboard(): #klar
+    with open("leaderboard.txt", 'r') as file:
+        for i, line in enumerate(file):
+            if i < 5:
+                print(f"        {i+1}. " + line.strip())
 
 def chooseAction(time): #klar
     answer = ""
@@ -592,7 +599,7 @@ def fallInTrap(chosenClass, alive, gold, maxHp): #klar
         print()
     return chosenClass, alive, gold + addedGold
 
-def leaderboard(name, lvl, chosenClass): #fixa så de funkar bra
+def leaderboard(name, lvl, chosenClass): #klar
     answer = input("""
         Do you want to save your turn in the leaderboard?
 
@@ -600,9 +607,17 @@ def leaderboard(name, lvl, chosenClass): #fixa så de funkar bra
         
         """)
     if answer == "1":
-        f = open("leaderboard.txt", "a")
-        f.write(f"{name}, {chosenClass.className},{lvl}\n")
-    
+        file = open("input.txt", "a")
+        file.write(f"{name}, {lvl}\n")
+        with open('input.txt', 'r') as file:
+            lines = [line.split() for line in file]
+
+        sorted_lines = sorted(lines, key=lambda x: int(x[1]), reverse=True)
+
+        with open('leaderboard.txt', 'w') as file:
+            for line in sorted_lines:
+                file.write(' '.join(line) + '\n')   
+
     elif answer == "2": 
         print("Alrighty, good luck on your next adventure!")
 
@@ -652,6 +667,19 @@ def main():
         #add lvl i leaderboard
         #fixa odds för allt
 
-    leaderboard(name, lvl, chosenClass)   
-
+    leaderboard(name, lvl, chosenClass)  
+    answer = input("""        Do you want to play again?
+                                1. Yes          2. No
+        """) 
+    while answer not in ["1", "2"]:
+        if answer == "1":
+            main()
+        elif answer == "2":
+            print("       Have a good one adventurer!")
+        else:
+            input("""       Please enter one of the available options!
+                            
+        """)
+    
+    
 main()
