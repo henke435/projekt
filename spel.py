@@ -600,6 +600,7 @@ def fallInTrap(chosenClass, alive, gold, maxHp): #klar
     return chosenClass, alive, gold + addedGold
 
 def leaderboard(name, lvl, chosenClass): #klar
+
     answer = input("""
         Do you want to save your turn in the leaderboard?
 
@@ -608,11 +609,11 @@ def leaderboard(name, lvl, chosenClass): #klar
         """)
     if answer == "1":
         file = open("input.txt", "a")
-        file.write(f"{name}, {lvl}\n")
+        file.write(f"{name}, {chosenClass}, {lvl}\n")
         with open('input.txt', 'r') as file:
-            lines = [line.split() for line in file]
+            lines = [line.split(",") for line in file]
 
-        sorted_lines = sorted(lines, key=lambda x: int(x[1]), reverse=True)
+        sorted_lines = sorted(lines, key=lambda x: int(x[2]), reverse=True)
 
         with open('leaderboard.txt', 'w') as file:
             for line in sorted_lines:
@@ -649,10 +650,10 @@ def main():
             if odds < 35:
                 chosenClass, lvl, gold, alive = monsterFight(chosenClass, lvl, gold, currentWeapon)
 
-            elif odds >= 35 and odds < 55:
+            elif odds >= 35 and odds < 50:
                 gold, currentWeapon, potions, weapons = openChest(chosenClass, gold, currentWeapon, potions, weapons)
 
-            elif odds >= 55 and odds < 75:
+            elif odds >= 50 and odds < 75:
                 gold, currentWeapon, potions, weapons = merchant(chosenClass, gold, currentWeapon, potions, weapons)
         
             elif odds >= 75:
@@ -667,7 +668,7 @@ def main():
         #add lvl i leaderboard
         #fixa odds för allt
 
-    leaderboard(name, lvl, chosenClass)  
+    leaderboard(name, lvl, chosenClass.className)  
     answer = input("""        Do you want to play again?
                                 1. Yes          2. No
         """) 
