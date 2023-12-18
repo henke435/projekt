@@ -3,14 +3,14 @@ import random as r
 import math
 import time
 
-class playerClass():
+class PlayerClass():
     def __init__(self, hp, damage, trapRisk, className):
         self.hp = hp
         self.damage = damage
         self.trapRisk = trapRisk
         self.className = className
 
-class monsterClass():
+class MonsterClass():
     def __init__(self, hp, damage, name):
         self.hp = hp
         self.damage = damage
@@ -21,7 +21,7 @@ class Item():
         self.name = name
         self.strength = strength
 
-def startInput(): #klar
+def startInput(): 
     answer = ""
     while answer != "1":
         answer = input("""
@@ -36,13 +36,13 @@ def startInput(): #klar
         elif answer != "1":
             print("\nPlease enter one of the available options!")
 
-def printHighScore(): #klar
+def printHighScore(): 
     with open("highscore.txt", 'r') as file:
         for i, line in enumerate(file):
             if i < 5:
                 print(f"        {i+1}. " + line.strip())
 
-def chooseAction(time): #klar
+def chooseAction(time): 
     answer = ""
     while answer != "1":   
         if time == 0:
@@ -73,7 +73,7 @@ def chooseAction(time): #klar
         else:
             print("\nPlease enter one of the available options!")
 
-def continueAdventure(): #klar
+def continueAdventure(): 
     answer = ""
     textVariation = r.randint(0,2)
     while answer not in ["1", "2", "3"]: 
@@ -107,7 +107,7 @@ def continueAdventure(): #klar
         
     return r.randint(0,100)
 
-def chooseClass(name): #klar
+def chooseClass(name): 
     answer = ""
     while answer not in ["1", "2", "3"]: 
         answer = input("""
@@ -120,17 +120,17 @@ def chooseClass(name): #klar
         if answer == "1":
             print(f"""\n        You chose Bruiser, Good luck, {name}!""")
             input("\nPress 'Enter' to continue!")
-            currentClass = playerClass(200, 15, 0.8, "Bruiser")
+            currentClass = PlayerClass(200, 15, 0.8, "Bruiser")
             return currentClass
         elif answer == "2":
             print(f"""\n        You chose Archer, Good luck, {name}!""")
             input("\nPress 'Enter' to continue!")
-            currentClass = playerClass(120, 15, 1.1, "Archer")
+            currentClass = PlayerClass(120, 15, 1.1, "Archer")
             return currentClass
         elif answer == "3":
             print(f"""\n        You chose Assassin, Good luck, {name}!""")
             input("\nPress 'Enter' to continue!")
-            currentClass = playerClass(70, 28, 1.4, "Assassin")
+            currentClass = PlayerClass(70, 28, 1.4, "Assassin")
             return currentClass
         elif answer == "4":
             print("""
@@ -146,7 +146,7 @@ def chooseClass(name): #klar
         else:
             print("\nPlease enter one of the available options!")
 
-def checkStats(chosenClass, lvl, currentWeapon, maxHp): #klar
+def checkStats(chosenClass, lvl, currentWeapon, maxHp):
     print(f"""
             Stats
           
@@ -163,7 +163,7 @@ def checkStats(chosenClass, lvl, currentWeapon, maxHp): #klar
 """)
     input("Press 'Enter' to continue!")
 
-def checkInventory(weapons, gold, potions, chosenClass, maxHp): #klar
+def checkInventory(weapons, gold, potions, chosenClass, maxHp): 
     answer = ""
     print(f"""
 
@@ -197,12 +197,12 @@ def checkInventory(weapons, gold, potions, chosenClass, maxHp): #klar
             print("\nPlease enter one of the available options!")
     return chosenClass, potions
 
-def monsterFight(chosenClass, lvl, gold, currentWeapon): #fixa lite mer inlevelse, kanske durability t vapen
+def monsterFight(chosenClass, lvl, gold, currentWeapon): 
     monsterNameList = ["Zargothrax", "Azazel", "Behemoth", "Cthulhu", "Dracula", "Echidna", "Fenrir", "Gorgon", "Hydra", "Ifrit", "Jormungandr", "Kelpie", "Leviathan", "Minotaur", "Nemean", "Orcus", "Phoenix", "Quetzalcoatl", "Ravana", "Sphinx", "Tiamat", "Undine", "Vampire", "Wendigo", "Xolotl", "Yeti", "Zombie"]
     
     monsterStrength = r.randint(7*round(math.sqrt(lvl)), 12*round(math.sqrt(lvl)))
     monsterHp = r.randint(30*round(math.sqrt(lvl)), 60*round(math.sqrt(lvl)))
-    monster = monsterClass(monsterHp, monsterStrength, monsterNameList[r.randint(0, len(monsterNameList) - 1 )])
+    monster = MonsterClass(monsterHp, monsterStrength, monsterNameList[r.randint(0, len(monsterNameList) - 1 )])
 
     print(f"\n        You encounter a {monster.name} with {monster.hp} hp and {monster.damage} damage")
 
@@ -229,7 +229,7 @@ def monsterFight(chosenClass, lvl, gold, currentWeapon): #fixa lite mer inlevels
         input("\nPress 'Enter' to continue!")
         return chosenClass, lvl + 1, gold + addedGold, True
     
-def openChest(chosenClass, gold, currentWeapon, potions, weapons): #klar
+def openChest(chosenClass, gold, currentWeapon, potions, weapons): 
     bruiserWeapons  = ["Steel Axe", "Broad Axe", "Swift Axe", "Double-edged Axe", "Enchanted Double-edged Axe"]
     archerWeapons  = ["Wooden Bow", "Black Bow", "Light Bow", "Swift Bow", "Enchanted Silver Bow"]
     assassinWeapons  = ["Steel Dagger", "Heavy Sword", "Longsword", "Magic Dagger", "Flaming Dagger"]
@@ -272,7 +272,7 @@ def openChest(chosenClass, gold, currentWeapon, potions, weapons): #klar
 
         return gold, currentWeapon, potions, weapons
 
-def merchant(chosenClass, gold, currentWeapon, potions, weapons): #klar
+def merchant(chosenClass, gold, currentWeapon, potions, weapons):
     bruiserWeapons  = ["Steel Axe", "Broad Axe", "Swift Axe", "Double-edged Axe", "Enchanted Double-edged Axe"]
     archerWeapons  = ["Wooden Bow", "Black Bow", "Light Bow", "Swift Bow", "Enchanted Silver Bow"]
     assassinWeapons  = ["Steel Dagger", "Heavy Sword", "Longsword", "Magic Dagger", "Flaming Dagger"]
@@ -338,7 +338,7 @@ def merchant(chosenClass, gold, currentWeapon, potions, weapons): #klar
         weapons, gold, currentWeapon = selling(gold, weapons, currentWeapon)
         return gold, currentWeapon, potions, weapons  
     
-def selling(gold, weapons, currentWeapon): #fixa inlevelse
+def selling(gold, weapons, currentWeapon): 
     keepSelling = True
     if len(weapons) > 1:
         while keepSelling:
@@ -405,7 +405,7 @@ def selling(gold, weapons, currentWeapon): #fixa inlevelse
                 currentWeapon = weapons[i]    
     return weapons, gold, currentWeapon
         
-def bidding(gold, merchantInventory, weapons, potions, currentWeapon): #klar
+def bidding(gold, merchantInventory, weapons, potions, currentWeapon): 
     answerIsOk = False
     frustration = 0
     merchantItem = ""
@@ -493,7 +493,7 @@ def bidding(gold, merchantInventory, weapons, potions, currentWeapon): #klar
                 currentWeapon = merchantItem
             return potions, weapons, gold, currentWeapon
     
-def fallInTrap(chosenClass, alive, gold, maxHp): #klar
+def fallInTrap(chosenClass, alive, gold, maxHp): 
     alfabet = "abcdefghijklmnopqrstuvwxyz"
     textVariation = r.randint(0,3)
     addedGold = 0
@@ -599,19 +599,18 @@ def fallInTrap(chosenClass, alive, gold, maxHp): #klar
         print()
     return chosenClass, alive, gold + addedGold
 
-def HighScore(name, lvl, chosenClass): #klar
+def HighScore(name, lvl, chosenClass): 
 
     answer = input("""
         Do you want to save your Score?
-
-                1. Yes                     2. No
+        1. Yes                   2. No
         
         """)
     if answer == "1":
         file = open("input.txt", "a")
         file.write(f"{name}, {chosenClass}, {lvl} \n")
         with open('input.txt', 'r') as file:
-            lines = [line.split(",") for line in file]
+            lines = [line.split(",")[::-1] for line in file]
 
         sorted_lines = sorted(lines, key=lambda x: int(x[-1]), reverse=True)
 
@@ -620,7 +619,7 @@ def HighScore(name, lvl, chosenClass): #klar
                 file.write(' '.join(line))   
 
     elif answer == "2": 
-        print("Alrighty, good luck on your next adventure!")
+        print("\n       Alrighty, good luck on your next adventure!\n")
 
 def main():
     lvl = 1
@@ -671,21 +670,18 @@ def main():
     HighScore(name, lvl, chosenClass.className)  
     
     answer = input("""        Do you want to play again?
-                                1. Yes          2. No
+           1. Yes          2. No\n
         """) 
     
-    while answer not in [1, 2]:
-
-        if answer == "1":
-            main()
-
-        elif answer == "2":
-            print("       Have a good one adventurer!")
-       
-        else:
-            input("""       Please enter one of the available options!
-                            
+    while answer not in ["1", "2"]:
+        input("""       Please enter one of the available options!
+                                    
         """)
-    
-    
+        answer = input("\n\n        ")
+    if answer == "1":
+        main()
+
+    elif answer == "2":
+        print("       Have a good one adventurer!")
+       
 main()

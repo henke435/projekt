@@ -13,3 +13,7 @@ r, Archer, 2
 3, Assassin, 3 
 1, Assassin, 1 
 1, Archer, 3 
+Hejsan    ,   , Assassin, 2 
+Hej    ,,    , Archer, 1 
+her   ,  , Assassin, 2 
+he   ,  , Assassin, 3 
